@@ -1,0 +1,98 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+body {
+    font-family: 'Inter', sans-serif;
+    padding-top: 56px;
+    /* Height of navbar */
+    min-height: 100vh;
+}
+
+/* Ensure main content takes full height */
+main {
+    min-height: calc(100vh - 56px - 80px);
+    /* Subtract navbar and player heights */
+}
+
+/* Fixed navbar styles */
+.custom-navbar {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+}
+
+/* Fixed player styles */
+custom-player {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    z-index: 1000;
+}
+
+/* Player button animations */
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.1);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+.control-btn:active {
+    animation: pulse 0.3s ease;
+}
+
+.mood-card:hover>div {
+    background: rgba(99, 102, 241, 0.9);
+    transform: scale(1.03);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+}
+
+.mood-card>div {
+    transition: all 0.3s ease;
+}
+
+section {
+    padding: 1rem;
+    border-radius: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+section h2 {
+    border-bottom: 2px solid rgba(168, 85, 247, 0.2);
+    padding-bottom: 0.5rem;
+}
+
+/* Playlist item styling */
+#moodSections .bg-gray-800 {
+    transition: transform 0.2s ease;
+}
+
+#moodSections .bg-gray-800:hover {
+    transform: translateY(-2px);
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #1a1a1a;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #444;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}

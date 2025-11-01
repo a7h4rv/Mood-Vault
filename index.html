@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vibe-Vault | Sonic Sanctuary</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#000000',
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+
+<body class="bg-gray-900 text-gray-100 min-h-screen">
+    <custom-navbar></custom-navbar>
+
+    <main class="container mx-auto px-4 py-8">
+        <section class="mb-12">
+            <h1 class="text-4xl font-bold mb-6">How are you feeling today?</h1>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <a href="player.html?mood=focus" class="mood-card" data-mood="focus">
+                    <div class="bg-gray-800 rounded-lg p-6 hover:bg-gray-700 transition-all h-full">
+                        <i data-feather="activity" class="w-12 h-12 mb-4"></i>
+                        <h3 class="text-xl font-semibold">Focus</h3>
+                        <p class="text-gray-400 mt-2">Concentration booster</p>
+                    </div>
+                </a>
+                <a href="player.html?mood=chill" class="mood-card" data-mood="chill">
+                    <div class="bg-gray-800 rounded-lg p-6 hover:bg-gray-700 transition-all h-full">
+                        <i data-feather="coffee" class="w-12 h-12 mb-4"></i>
+                        <h3 class="text-xl font-semibold">Chill</h3>
+                        <p class="text-gray-400 mt-2">Relaxing vibes</p>
+                    </div>
+                </a>
+                <a href="player.html?mood=energy" class="mood-card" data-mood="energy">
+                    <div class="bg-gray-800 rounded-lg p-6 hover:bg-gray-700 transition-all h-full">
+                        <i data-feather="zap" class="w-12 h-12 mb-4"></i>
+                        <h3 class="text-xl font-semibold">Energy</h3>
+                        <p class="text-gray-400 mt-2">Power up your day</p>
+                    </div>
+                </a>
+                <a href="player.html?mood=sleep" class="mood-card" data-mood="sleep">
+                    <div class="bg-gray-800 rounded-lg p-6 hover:bg-gray-700 transition-all h-full">
+                        <i data-feather="moon" class="w-12 h-12 mb-4"></i>
+                        <h3 class="text-xl font-semibold">Sleep</h3>
+                        <p class="text-gray-400 mt-2">Calm your mind</p>
+                    </div>
+                </a>
+            </div>
+        </section>
+
+        <section>
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold">Quick Actions</h2>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <a href="search.html"
+                    class="bg-gray-800 rounded-lg p-6 hover:bg-gray-700 transition-all flex items-center">
+                    <i data-feather="search" class="w-8 h-8 mr-4"></i>
+                    <div>
+                        <h3 class="font-semibold">Search Songs</h3>
+                        <p class="text-sm text-gray-400">Find any track</p>
+                    </div>
+                </a>
+                <a href="player.html"
+                    class="bg-gray-800 rounded-lg p-6 hover:bg-gray-700 transition-all flex items-center">
+                    <i data-feather="music" class="w-8 h-8 mr-4"></i>
+                    <div>
+                        <h3 class="font-semibold">Player</h3>
+                        <p class="text-sm text-gray-400">Current playlist</p>
+                    </div>
+                </a>
+                <a href="stats.html"
+                    class="bg-gray-800 rounded-lg p-6 hover:bg-gray-700 transition-all flex items-center">
+                    <i data-feather="bar-chart-2" class="w-8 h-8 mr-4"></i>
+                    <div>
+                        <h3 class="font-semibold">Your Stats</h3>
+                        <p class="text-sm text-gray-400">Listening history</p>
+                    </div>
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <custom-player></custom-player>
+
+    <script src="components/navbar.js"></script>
+    <script src="components/player.js"></script>
+    <script src="script.js"></script>
+    <script>
+        feather.replace();
+    </script>
+</body>
+
+</html>

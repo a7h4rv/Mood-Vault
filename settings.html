@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings | Vibe-Vault</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="bg-gray-900 text-gray-100 min-h-screen pb-24">
+    <custom-navbar></custom-navbar>
+
+    <main class="container mx-auto px-4 py-8">
+        <h1 class="text-3xl font-bold mb-8">Settings</h1>
+
+        <div class="bg-gray-800 rounded-xl p-6 mb-8">
+            <h2 class="text-xl font-semibold mb-4 flex items-center">
+                <i data-feather="key" class="w-5 h-5 mr-2"></i> Jamendo API
+            </h2>
+
+            <div class="mb-4">
+                <label class="block text-gray-400 text-sm mb-2" for="apiKey">
+                    Client ID
+                </label>
+                <input type="password" id="apiKey" placeholder="Enter your Jamendo Client ID"
+                    class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary-500">
+                <p class="text-xs text-gray-500 mt-2">
+                    Get your free API key from <a href="https://developer.jamendo.com/" target="_blank"
+                        class="text-primary-400 hover:underline">Jamendo Developer Portal</a>
+                </p>
+            </div>
+
+            <button id="saveApiKey"
+                class="bg-primary-500 text-white px-4 py-2 rounded-lg hover:bg-primary-600 transition-colors">
+                Save Settings
+            </button>
+        </div>
+
+        <div class="bg-gray-800 rounded-xl p-6">
+            <h2 class="text-xl font-semibold mb-4 flex items-center">
+                <i data-feather="info" class="w-5 h-5 mr-2"></i> About
+            </h2>
+            <p class="text-gray-300 mb-4">
+                Vibe-Vault uses the Jamendo API to provide music streaming functionality.
+                You need a free Jamendo Client ID to enable full features.
+            </p>
+            <div class="text-sm text-gray-400">
+                <p>Version 1.0.0</p>
+                <p class="mt-2">© 2023 Vibe-Vault</p>
+            </div>
+        </div>
+    </main>
+
+    <custom-player></custom-player>
+
+    <script src="components/navbar.js"></script>
+    <script src="components/player.js"></script>
+    <script src="script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            feather.replace();
+
+            const apiKeyInput = document.getElementById('apiKey');
+            const saveBtn = document.getElementById('saveApiKey');
+
+            // Load saved API key if exists
+            const savedKey = localStorage.getItem('jamendoClientId');
+            if (savedKey) {
+                apiKeyInput.value = savedKey;
+            }
+
+            saveBtn.addEventListener('click', () => {
+                const key = apiKeyInput.value.trim();
+                if (key) {
+                    localStorage.setItem('jamendoClientId', key);
+                    alert('API key saved successfully!');
+                } else {
+                    alert('Please enter a valid API key');
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

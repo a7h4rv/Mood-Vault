@@ -1,155 +1,75 @@
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stats | Vibe-Vault</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/feather-icons"></script>
-    <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <title>VibeVault – Mood-Based Music Player</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+
+    <script defer src="navbar.js"></script>
+    <script defer src="player.js"></script>
 </head>
 
-<body class="bg-gray-900 text-gray-100 min-h-screen pb-24">
-    <custom-navbar></custom-navbar>
+<body>
+    <nav id="navbar"></nav>
 
-    <main class="container mx-auto px-4 py-8">
-        <h1 class="text-3xl font-bold mb-8">Your Listening Stats</h1>
+    <main class="container text-center py-5">
+        <h1 class="app-title mb-4">Your Listening Stats</h1>
+        <p class="subtitle mb-5">Analyze your listening habits and top moods.</p>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
-            <div class="bg-gray-800 rounded-xl p-6">
-                <div class="flex justify-between items-center mb-6">
-                    <h2 class="text-xl font-semibold">Total Listens</h2>
-                    <i data-feather="headphones" class="text-primary-500"></i>
-                </div>
-                <p class="text-5xl font-bold" id="totalListens">0</p>
+        <div class="mx-auto" style="max-width:600px;">
+            <div class="bg-dark p-4 rounded shadow-sm border border-secondary text-start">
+                <p><strong>Total Listening Time:</strong> <span id="listening-time">0 mins</span></p>
+                <p><strong>Most Played Track:</strong> <span id="most-played">None</span></p>
+                <p><strong>Most Selected Mood:</strong> <span id="top-mood">None</span></p>
             </div>
-
-            <div class="bg-gray-800 rounded-xl p-6">
-                <div class="flex justify-between items-center mb-6">
-                    <h2 class="text-xl font-semibold">Top Mood</h2>
-                    <i data-feather="star" class="text-primary-500"></i>
-                </div>
-                <p class="text-3xl font-bold" id="topMood">None yet</p>
-                <p class="text-gray-400 mt-2 text-sm" id="moodStats"></p>
-            </div>
-        </div>
-
-        <div class="bg-gray-800 rounded-xl p-6 mb-12">
-            <div class="flex justify-between items-center mb-6">
-                <h2 class="text-xl font-semibold">Mood Distribution</h2>
-                <i data-feather="pie-chart" class="text-primary-500"></i>
-            </div>
-            <canvas id="moodChart" height="300"></canvas>
-        </div>
-
-        <div class="bg-gray-800 rounded-xl p-6">
-            <div class="flex justify-between items-center mb-6">
-                <h2 class="text-xl font-semibold">Recently Played</h2>
-                <i data-feather="clock" class="text-primary-500"></i>
-            </div>
-            <div id="recentTracks" class="space-y-4">
-                <!-- Recent tracks will be populated here -->
-            </div>
-        </div>
-
-        <div class="mt-8 text-center">
-            <button id="clearStats" class="text-sm text-red-400 hover:text-red-300 flex items-center mx-auto">
-                <i data-feather="trash-2" class="w-4 h-4 mr-1"></i> Clear All Stats
-            </button>
         </div>
     </main>
 
-    <custom-player></custom-player>
+    <!-- Player Footer -->
+    <footer id="player-bar" class="d-flex align-items-center justify-content-between px-3">
+        <div class="d-flex align-items-center">
+            <img id="artwork" src="" alt="Artwork" class="artwork me-3">
+            <div>
+                <span id="track-title">No track playing</span><br>
+                <small id="track-artist"></small>
+            </div>
+        </div>
 
-    <script src="components/navbar.js"></script>
-    <script src="components/player.js"></script>
-    <script src="script.js"></script>
+        <div id="controls" class="d-flex align-items-center">
+            <button id="prev-btn" class="btn btn-link text-light"><i class="bi bi-skip-backward"></i></button>
+            <button id="play-pause-btn" class="btn btn-link text-light"><i class="bi bi-play-fill"></i></button>
+            <button id="next-btn" class="btn btn-link text-light"><i class="bi bi-skip-forward"></i></button>
+        </div>
+    </footer>
+
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const stats = localStorage.getItem('musicStats') ?
-                JSON.parse(localStorage.getItem('musicStats')) :
-                { listens: 0, moods: {} };
+        document.addEventListener("DOMContentLoaded", () => {
+            const stats = JSON.parse(localStorage.getItem("vibeStats") || "{}");
+            const total = Math.floor((stats.totalListeningTime || 0) / 60);
+            document.getElementById("listening-time").textContent = total + " mins";
 
-            document.getElementById('totalListens').textContent = stats.listens || 0;
-            // Set up stats view
-            if (stats.moods) {
-                const moodEntries = Object.entries(stats.moods);
-                if (moodEntries.length > 0) {
-                    const topMood = moodEntries.sort((a, b) => b[1] - a[1])[0];
-                    document.getElementById('topMood').textContent =
-                        topMood[0].charAt(0).toUpperCase() + topMood[0].slice(1);
+            // Most played track
+            const trackCounts = stats.trackCounts || {};
+            const topTrack = Object.keys(trackCounts).length
+                ? Object.entries(trackCounts).sort((a, b) => b[1] - a[1])[0][0]
+                : "None";
+            document.getElementById("most-played").textContent = topTrack;
 
-                    // Create mood distribution chart
-                    const ctx = document.getElementById('moodChart').getContext('2d');
-                    new Chart(ctx, {
-                        type: 'pie',
-                        data: {
-                            labels: moodEntries.map(entry => entry[0].charAt(0).toUpperCase() + entry[0].slice(1)),
-                            datasets: [{
-                                data: moodEntries.map(entry => entry[1]),
-                                backgroundColor: [
-                                    '#6366f1',
-                                    '#8b5cf6',
-                                    '#ec4899',
-                                    '#f43f5e',
-                                    '#f97316',
-                                    '#f59e0b'
-                                ],
-                                borderWidth: 0
-                            }]
-                        },
-                        options: {
-                            responsive: true,
-                            maintainAspectRatio: false,
-                            plugins: {
-                                legend: {
-                                    position: 'right',
-                                    labels: {
-                                        color: '#e5e7eb',
-                                        font: {
-                                            family: "'Inter', sans-serif"
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    });
-                }
-            }
-
-            // Display recent tracks
-            const recentTracks = document.getElementById('recentTracks');
-            if (stats.recent && stats.recent.length > 0) {
-                recentTracks.innerHTML = stats.recent.map(track => `
-                    <div class="bg-gray-700 rounded-lg p-4 flex items-center">
-                        <img src="${track.cover || 'http://static.photos/music/200x200/1'}" alt="${track.title}" 
-                            class="w-12 h-12 rounded-lg object-cover flex-shrink-0">
-                        <div class="ml-4 overflow-hidden flex-grow">
-                            <h3 class="font-medium truncate">${track.title}</h3>
-                            <p class="text-sm text-gray-400 truncate">${track.artist}</p>
-                        </div>
-                        <div class="text-xs text-gray-500 ml-4 flex-shrink-0">
-                            ${new Date(track.timestamp).toLocaleString()}
-                        </div>
-                    </div>
-                `).join('');
-            } else {
-                recentTracks.innerHTML = `
-                    <div class="text-center text-gray-400 py-8">
-                        <i data-feather="music" class="w-8 h-8 mx-auto mb-2"></i>
-                        <p>No recent tracks</p>
-                    </div>
-                `;
-            }
-            feather.replace();
-
-            document.getElementById('clearStats').addEventListener('click', () => {
-                localStorage.removeItem('musicStats');
-                location.reload();
-            });
+            // Most selected mood
+            const moodCounts = stats.moodCounts || {};
+            const topMood = Object.keys(moodCounts).length
+                ? Object.entries(moodCounts).sort((a, b) => b[1] - a[1])[0][0]
+                : "None";
+            document.getElementById("top-mood").textContent = topMood;
         });
-</body >
-</html >
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

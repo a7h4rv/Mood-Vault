@@ -1,98 +1,198 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-
+/* Global Layout */
 body {
-    font-family: 'Inter', sans-serif;
-    padding-top: 56px;
-    /* Height of navbar */
-    min-height: 100vh;
+    background-color: #121212;
+    color: #e5e5e5;
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
 }
 
-/* Ensure main content takes full height */
-main {
-    min-height: calc(100vh - 56px - 80px);
-    /* Subtract navbar and player heights */
+.app-title {
+    font-size: 2rem;
+    font-weight: 600;
 }
 
-/* Fixed navbar styles */
-.custom-navbar {
-    position: fixed;
-    top: 0;
-    width: 100%;
-    z-index: 1000;
+.subtitle {
+    font-size: 1rem;
+    color: #9ca3af;
 }
 
-/* Fixed player styles */
-custom-player {
+/* Navbar */
+.nav-container {
+    display: flex;
+    justify-content: center;
+    background-color: #181818;
+    padding: 1rem;
+    border-bottom: 1px solid #222;
+}
+
+.nav-link {
+    color: #b0b0b0;
+    margin: 0 1rem;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.nav-link:hover {
+    color: #ffffff;
+}
+
+/* Mood Tiles */
+.mood-tile {
+    background-color: #1e1e1e;
+    border-radius: 10px;
+    border: 1px solid #2a2a2a;
+    padding: 2rem;
+    font-weight: 600;
+    color: #f5f5f5;
+    cursor: pointer;
+    transition: all 0.25s ease-in-out;
+}
+
+.mood-tile:hover {
+    background-color: #252525;
+    transform: scale(1.06);
+}
+
+/* Playlist Section */
+#playlist-section {
+    width: 80%;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 1rem;
+    text-align: left;
+    min-height: 45vh;
+}
+
+.playlist-title {
+    font-size: 1.3rem;
+    color: #a0a0a0;
+    margin-bottom: 0.5rem;
+}
+
+.playlist-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    border: 1px solid #2a2a2a;
+    border-radius: 6px;
+    background-color: #181818;
+    max-height: calc(100vh - 260px);
+    overflow-y: auto;
+}
+
+.playlist-item {
+    padding: 0.9rem 1rem;
+    border-bottom: 1px solid #222;
+    color: #dcdcdc;
+    transition: background 0.2s ease;
+    cursor: pointer;
+}
+
+.playlist-item:hover {
+    background-color: #2a2a2a;
+}
+
+.playlist-item.active {
+    background-color: #333333;
+    color: #03a9f4;
+}
+
+/* Scrollbar Customization */
+.playlist-list::-webkit-scrollbar {
+    width: 6px;
+}
+
+.playlist-list::-webkit-scrollbar-thumb {
+    background-color: #333;
+    border-radius: 3px;
+}
+
+.playlist-list::-webkit-scrollbar-thumb:hover {
+    background-color: #555;
+}
+
+/* Player Bar */
+#player-bar {
     position: fixed;
     bottom: 0;
+    left: 0;
     width: 100%;
-    z-index: 1000;
+    background-color: #181818;
+    border-top: 1px solid #2a2a2a;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    height: 90px;
+    z-index: 100;
 }
 
-/* Player button animations */
-@keyframes pulse {
-    0% {
-        transform: scale(1);
+#artwork {
+    width: 70px;
+    height: 70px;
+    border-radius: 8px;
+    object-fit: cover;
+    background-color: #2a2a2a;
+}
+
+#track-title {
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+#track-artist {
+    font-size: 0.85rem;
+    color: #9a9a9a;
+}
+
+/* Control Buttons */
+#controls button {
+    background: none;
+    border: none;
+    color: #e0e0e0;
+    font-size: 1.4rem;
+    margin: 0 0.6rem;
+    cursor: pointer;
+    transition: transform 0.15s ease, color 0.2s ease;
+}
+
+#controls button:hover {
+    color: #03a9f4;
+    transform: scale(1.15);
+}
+
+/* Particle Canvas */
+#particle-canvas {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 200px;
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .mood-tile {
+        padding: 1.5rem;
     }
 
-    50% {
-        transform: scale(1.1);
+    #playlist-section {
+        width: 90%;
     }
 
-    100% {
-        transform: scale(1);
+    #player-bar {
+        flex-direction: column;
+        height: auto;
+        padding: 1rem;
     }
-}
 
-.control-btn:active {
-    animation: pulse 0.3s ease;
-}
-
-.mood-card:hover>div {
-    background: rgba(99, 102, 241, 0.9);
-    transform: scale(1.03);
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
-}
-
-.mood-card>div {
-    transition: all 0.3s ease;
-}
-
-section {
-    padding: 1rem;
-    border-radius: 0.5rem;
-    margin-bottom: 1rem;
-}
-
-section h2 {
-    border-bottom: 2px solid rgba(168, 85, 247, 0.2);
-    padding-bottom: 0.5rem;
-}
-
-/* Playlist item styling */
-#moodSections .bg-gray-800 {
-    transition: transform 0.2s ease;
-}
-
-#moodSections .bg-gray-800:hover {
-    transform: translateY(-2px);
-}
-
-/* Custom scrollbar */
-::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
-}
-
-::-webkit-scrollbar-track {
-    background: #1a1a1a;
-}
-
-::-webkit-scrollbar-thumb {
-    background: #444;
-    border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-    background: #555;
+    #artwork {
+        width: 60px;
+        height: 60px;
+        margin-bottom: 0.5rem;
+    }
 }
